@@ -40,6 +40,7 @@ bool Redis::connect()
             observe_channel_message();
         }
     );
+    t.detach();
     cout<<"connect redis-server success!"<<endl;
     return true;
 }
@@ -114,7 +115,7 @@ void Redis::observe_channel_message()
         reply->element[1]表示通道号
         reply->element[2]表示消息
         */
-        if(!reply && !reply->element[2] && !reply->element[2]->str)
+        if(reply && reply->element[2] && reply->element[2]->str)
         {
             //给业务层上报通道上的消息
             _notify_message_handler(atoi(reply->element[1]->str),reply->element[2]->str);
