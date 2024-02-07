@@ -9,8 +9,8 @@ bool FriendModel::insert(int userId,int friendId)
 {
     char sql[1024]={0};
     sprintf(sql,
-            "insert into friend values(%d,%d)",
-            userId,friendId);
+            "insert into friend values(%d,%d),(%d,%d)",
+            userId,friendId,friendId,userId);
     MySql mysql;
     if(mysql.connection())
     {

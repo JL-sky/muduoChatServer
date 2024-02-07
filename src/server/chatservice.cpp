@@ -247,7 +247,6 @@ void ChatService::oneChat(const TcpConnectionPtr& conn,json& js,Timestamp time)
             return;
         }
     }
-
     //查询toid是否在其他服务器上在线
     User user=_userModel.queryById(toid);
     if(user.getState()=="online")//如果用户在其他服务器上在线，就通过消息队列转发消息
@@ -335,7 +334,7 @@ void ChatService::groupChat(const TcpConnectionPtr& conn,json& js,Timestamp time
             //在当前服务器上转发群消息
             it->second->send(js.dump());
         }else{
-            //查询用户是否在其他服务器上登录
+            // 查询用户是否在其他服务器上登录
             User user=_userModel.queryById(uid);
             if(user.getState()=="online")
             {
@@ -388,16 +387,20 @@ void ChatService::reset()
     _userModel.resetState();
 }
 
+#if 1
 //从redis消息队列中获取订阅的消息
-void ChatService::handlerRedisSubscribeMessage(int channel,string msg)
+void ChatService::handlerRedisSubscribeMessage(int userid, string msg)
 {
+    cout<<"hihihihi"<<endl;
     lock_guard<mutex> lock(_userConnMutex);
-    auto it=_userConnMap.find(channel);
-    if(it!=_userConnMap.end())
+    auto it = _userConnMap.find(userid);
+    if (it != _userConnMap.end())
     {
         it->second->send(msg);
         return;
     }
-    //存储用户的离线消息
-    _offlineMsgModel.insert(channel,msg);
+
+    // 存储该用户的离线消息
+    _offlineMsgModel.insert(userid, msg);
 }
+#endif
