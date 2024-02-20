@@ -7,7 +7,6 @@ using namespace std;
 #include<sys/types.h>
 #include<arpa/inet.h>
 #include<netinet/in.h>
-
 #include "clientservice.hpp"
 #include "json.hpp"
 using json=nlohmann::json;
@@ -68,7 +67,6 @@ int main(int argc,char **argv)
                 // clientRegister(clientfd);
                 break;
             }
-
             case 3:
                 close(clientfd);
                 exit(0);

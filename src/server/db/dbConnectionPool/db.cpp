@@ -2,20 +2,20 @@
 #include"public.hpp"
 
 //初始化mysql连接
-MySql::MySql()
+Connection::Connection()
 {
     _conn=mysql_init(nullptr);
 }
 
 //释放链接
-MySql::~MySql()
+Connection::~Connection()
 {
     if(_conn!=nullptr)
         mysql_close(_conn);
 }
 
 //连接数据库
-bool MySql::connection(string ip,unsigned short port,
+bool Connection::connect(string ip,unsigned short port,
                         string user,string passwd,
                         string dbname)
 {
@@ -43,7 +43,7 @@ bool MySql::connection(string ip,unsigned short port,
 }
 
 //对数据库做操作 update、delete、insert
-bool MySql::update(string sql)
+bool Connection::update(string sql)
 {
     if(mysql_query(_conn,sql.c_str()))
     {
@@ -55,7 +55,7 @@ bool MySql::update(string sql)
 }
 
 //查询操作  select
-MYSQL_RES* MySql::query(string sql)
+MYSQL_RES* Connection::query(string sql)
 {
     if(mysql_query(_conn,sql.c_str()))
     {
@@ -67,7 +67,7 @@ MYSQL_RES* MySql::query(string sql)
 }
 
 //获取数据库连接
-MYSQL* MySql::getConnection()
+MYSQL* Connection::getConnection()
 {
     return _conn;
 }

@@ -1,5 +1,6 @@
 #include "usermodel.hpp"
-#include "db.hpp"
+#include "connectionpool.hpp"
+#include<memory>
 
 bool UserModel::insert(User &user)
 {
@@ -10,15 +11,15 @@ bool UserModel::insert(User &user)
     user.getName().c_str(),user.getPasswd().c_str(),user.getState().c_str());
 
     //声明自定义的mysql类
-    MySql mysql;
-    //bool MySql::connection(string ip,unsigned short port,
-    //            string user,string passwd,string dbname)
-    if(mysql.connection())
+    // MySql mysql;
+    ConnectionPool* cp=ConnectionPool::getConnectionPool();
+    shared_ptr<Connection> sp=cp->getConnection();
+    if(sp)
     {
-        if(mysql.update(sql))
+        if(sp->update(sql))
         {
             //获取插入成功的用户数据成功生成的主键id
-            user.setId(mysql_insert_id(mysql.getConnection()));
+            user.setId(mysql_insert_id(sp->getConnection()));
             return true;
         }
     }
@@ -35,11 +36,13 @@ User UserModel::queryById(int id)
             id);
 
     //连接sql
-    MySql mysql;
-    if(mysql.connection())
+    // MySql mysql;
+    ConnectionPool* cp=ConnectionPool::getConnectionPool();
+    shared_ptr<Connection> sp=cp->getConnection();
+    if(sp)
     {
         //查询数据库
-        MYSQL_RES* res=mysql.query(sql);
+        MYSQL_RES* res=sp->query(sql);
         if(res)
         {
             User user;
@@ -66,10 +69,12 @@ bool UserModel::updateState(User& user)
             "update user set state='%s' where id=%d",
             user.getState().c_str(),user.getId());
 
-    MySql mysql;
-    if(mysql.connection())
+    // MySql mysql;
+    ConnectionPool* cp=ConnectionPool::getConnectionPool();
+    shared_ptr<Connection> sp=cp->getConnection();
+    if(sp)
     {
-        return mysql.update(sql);
+        return sp->update(sql);
     }
     return false;
 }
@@ -77,9 +82,11 @@ bool UserModel::updateState(User& user)
 void UserModel::resetState()
 {
     char sql[1024]="update user set state='offline' where state='online'";
-    MySql mysql;
-    if(mysql.connection())
+    // MySql mysql;
+    ConnectionPool* cp=ConnectionPool::getConnectionPool();
+    shared_ptr<Connection> sp=cp->getConnection();
+    if(sp)
     {
-        mysql.update(sql);
+        sp->update(sql);
     }
 }
