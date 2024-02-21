@@ -43,7 +43,7 @@ int main(int argc,char **argv)
         exit(-1);
     }
     
-    ClientService* cliSer=ClientService::getInstance();
+    ClientService* cliSer=ClientService::getInstance(clientfd);
     while(1)
     {
         //显示页面菜单

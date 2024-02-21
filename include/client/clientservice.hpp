@@ -5,17 +5,21 @@
 #include<ctime>
 #include<unordered_map>
 #include<functional>
+#include<atomic>
+#include<semaphore.h>
 
 #include "user.hpp"
 #include "group.hpp"
 #include "groupuser.hpp"
-using namespace std;
 
+#include "json.hpp"
+using json=nlohmann::json;
+using namespace std;
 
 class ClientService
 {
 public:
-    static ClientService* getInstance();
+    static ClientService* getInstance(const int& clientfd);
     //页面菜单
     void menu();
     //显示当前登录成功用户的基本信息
@@ -31,7 +35,8 @@ public:
     //主聊天页面程序
     void mainchat(const int& clientfd);
     //接收消息线程
-    static void readTaskHandler(const int& clientfd,User& g_curUser);
+    // static void readTaskHandler(const int& clientfd);
+    void readTaskHandler(const int& clientfd);
     // void readTaskHandler(const int& clientfd);
 
     //主聊天业务
@@ -44,10 +49,13 @@ public:
     void loginout(int,string);//退出登录
 private:
     ClientService();
+    ClientService(const int&clientfd);
+
+    ~ClientService();
     //控制聊天页面程序
-    bool _isMainChatRunning=false;
+    bool _isMainChatRunning;
     //控制接收线程,该线程只能启动一次,防止用户退出登录再次登录时开启多个接受线程浪费资源
-    static int s_readThreadNumber;
+    int s_readThreadNumber;
 
     //记录当前系统登录的用户信息
     User g_curUser;
@@ -55,6 +63,16 @@ private:
     vector<User> g_curFriendList;
     //记录当前系统登录用户的群组列表信息
     vector<Group> g_curUserGroupList;        
+
+    // 用于读写线程之间的通信
+    sem_t _rwsem;
+    // 记录登录状态
+    atomic_bool _isLoginSuccess{false};
+    //登录响应
+    void doLoginResponse(const int&clientfd,json &responsejs);
+    //注册响应
+    void doRegResponse(const int&clientfd,json &responsejs);
+
 
     //系统支持的客户端命令列表
     unordered_map<string,string> _commandMap;
