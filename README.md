@@ -4,6 +4,58 @@
 
 基于c++ muduo网络库实现的集群聊天服务器，使用nginx实现负载均衡，使用reids消息队列实现跨服务器通信,使用MySQL连接池优化服务器访问性能
 
+## 整体代码逻辑
+
+![](https://s3.bmp.ovh/imgs/2024/02/22/772bb877eb411d5b.png)
+
+## 服务器代码逻辑
+
+### 网络模块
+
+![](https://s3.bmp.ovh/imgs/2024/02/22/e510af239101211b.png)
+
+### 业务模块
+
+#### 登录
+
+![](https://s3.bmp.ovh/imgs/2024/02/23/8bada1e76c6f6bd1.png)
+
+#### 注册
+
+![](https://s3.bmp.ovh/imgs/2024/02/22/e4fbb21f0c15c882.png)
+
+#### 注销
+
+![](https://s3.bmp.ovh/imgs/2024/02/22/3b90d9d2db98d1b8.png)
+
+#### 加好友
+
+![](https://s3.bmp.ovh/imgs/2024/02/22/fb31eaf539c1b039.png)
+
+#### 单聊
+
+![](https://s3.bmp.ovh/imgs/2024/02/22/57d3ed98d61bfb15.png)
+
+#### 建群
+
+![](https://s3.bmp.ovh/imgs/2024/02/22/3cb787e781440afb.png)
+
+#### 加群
+
+![](https://s3.bmp.ovh/imgs/2024/02/22/7b9f8cf28c621817.png)
+
+#### 群聊
+
+![](https://s3.bmp.ovh/imgs/2024/02/23/e93bf480d210e35b.png)
+
+### 数据库连接池模块
+
+![](https://s3.bmp.ovh/imgs/2024/02/13/78c859931f18f9bf.png)
+
+## 客户端代码逻辑
+
+![](https://s3.bmp.ovh/imgs/2024/02/23/2c5c7f78f62e3019.png)
+
 ## 技术栈
 
 - Json序列化和反序列化 
@@ -402,5 +454,4 @@ passwd:123456
 ```bash
 3@jj:$ 群消息[1]        time:2024-02-21 00:32:56  id:1  name:jack  message:wowowowowo
 ```
-
 
