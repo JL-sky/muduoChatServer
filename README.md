@@ -54,7 +54,7 @@
 
 ## 客户端代码逻辑
 
-![](https://s3.bmp.ovh/imgs/2024/02/23/2c5c7f78f62e3019.png)
+![](https://s3.bmp.ovh/imgs/2024/02/23/0ac91629817de9b4.png)
 
 ## 技术栈
 
